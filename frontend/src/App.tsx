@@ -2,8 +2,22 @@ import React, { Component } from "react";
 import Modal from "./components/Modal";
 import axios from "axios";
 
-class App extends Component {
-  constructor(props) {
+interface TodoItem {
+  id?: number;
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+interface AppState {
+  viewCompleted: boolean;
+  todoList: TodoItem[];
+  modal: boolean;
+  activeItem: TodoItem;
+}
+
+class App extends Component<{}, AppState> {
+  constructor(props: {}) {
     super(props);
     this.state = {
       viewCompleted: false,
@@ -32,7 +46,7 @@ class App extends Component {
     this.setState({ modal: !this.state.modal });
   };
 
-  handleSubmit = (item) => {
+  handleSubmit = (item: TodoItem) => {
     this.toggle();
 
     if (item.id) {
@@ -46,28 +60,24 @@ class App extends Component {
       .then((res) => this.refreshList());
   };
 
-  handleDelete = (item) => {
+  handleDelete = (item: TodoItem) => {
     axios
       .delete(`/api/todos/${item.id}/`)
       .then((res) => this.refreshList());
   };
 
   createItem = () => {
-    const item = { title: "", description: "", completed: false };
+    const item: TodoItem = { title: "", description: "", completed: false };
 
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
 
-  editItem = (item) => {
+  editItem = (item: TodoItem) => {
     this.setState({ activeItem: item, modal: !this.state.modal });
   };
 
-  displayCompleted = (status) => {
-    if (status) {
-      return this.setState({ viewCompleted: true });
-    }
-
-    return this.setState({ viewCompleted: false });
+  displayCompleted = (status: boolean) => {
+    this.setState({ viewCompleted: status });
   };
 
   renderTabList = () => {
@@ -90,8 +100,8 @@ class App extends Component {
   };
 
   renderItems = () => {
-    const { viewCompleted } = this.state;
-    const newItems = this.state.todoList.filter(
+    const { viewCompleted, todoList } = this.state;
+    const newItems = todoList.filter(
       (item) => item.completed === viewCompleted
     );
 
