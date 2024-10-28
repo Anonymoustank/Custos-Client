@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, ChangeEvent } from "react";
 import {
   Button,
   Modal,
@@ -11,19 +11,37 @@ import {
   Label,
 } from "reactstrap";
 
-export default class CustomModal extends Component {
-  constructor(props) {
+interface CustomModalProps {
+  activeItem: {
+    title: string;
+    description: string;
+    completed: boolean;
+  };
+  toggle: () => void;
+  onSave: (item: { title: string; description: string; completed: boolean }) => void;
+}
+
+interface CustomModalState {
+  activeItem: {
+    title: string;
+    description: string;
+    completed: boolean;
+  };
+}
+
+export default class CustomModal extends Component<CustomModalProps, CustomModalState> {
+  constructor(props: CustomModalProps) {
     super(props);
     this.state = {
       activeItem: this.props.activeItem,
     };
   }
 
-  handleChange = (e) => {
+  handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let { name, value } = e.target;
 
     if (e.target.type === "checkbox") {
-      value = e.target.checked;
+      value = (e.target as HTMLInputElement).checked.toString();
     }
 
     const activeItem = { ...this.state.activeItem, [name]: value };
