@@ -11,6 +11,8 @@ node_modules/
 # Optional npm cache directory
 .npm
 
+__pycache__
+
 # Optional vscode cache directory
 .vscode
 
