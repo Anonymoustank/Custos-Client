@@ -231,7 +231,7 @@ const login = (custosClientId: string, redirectUrl: string) => {
 
 const App: React.FC = () => {
   const [custosClientId, setCustosClientId] = useState('');
-  const [redirectUrl, setRedirectUrl] = useState('http://localhost:3000/redirect');
+  const [redirectUrl, setRedirectUrl] = useState('http://localhost:3000/callback');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

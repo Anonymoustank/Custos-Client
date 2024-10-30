@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Profile from './Profile';
 
 interface UserInfo {
-  given_name: string;
   name: string;
   email: string;
-  preferred_username: string;
+  username: string;
 }
 
 const Callback: React.FC = () => {
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>({
+    name: "Loading...",
+    email: "Loading...",
+    username: "Loading..."
+  });
   const location = useLocation();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [code, setCode] = useState<string | null>(null);
@@ -33,9 +37,7 @@ const Callback: React.FC = () => {
           clientId: localStorage.getItem('custosClientId')
         });
 
-        console.log('Response data:', response.data);
         setAccessToken(response.data.access_token); // Store the access token
-        localStorage.setItem('access_token', response.data.access_token); // Optionally store in localStorage
       } catch (error) {
         console.error('Error fetching token:', error);
       }
@@ -49,30 +51,22 @@ const Callback: React.FC = () => {
     const getUserInfo = async () => {
       try {
         const response = await axios.post('/api/v1/user-management/userinfo', {
-          access_token: localStorage.getItem('access_token'),
+          access_token: accessToken,
           clientId: localStorage.getItem('custosClientId'),
           code: code,
         });
-        console.log('User data:', response.data);
-        setUserInfo(response.data); // Store the user data
+        setUserInfo(response.data);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error getting user data: ', error);
       }
     };
     getUserInfo();
   }, [accessToken, code]);
 
   return (
-    <div>
-      {userInfo && (
-        <div>
-          <h2>Welcome: {userInfo.given_name}</h2>
-          <p>User Name: {userInfo.name}</p>
-          <p>User Email: {userInfo.email}</p>
-          <p>Preferred Username: {userInfo.preferred_username}</p>
-        </div>
-      )}
-    </div>
+    userInfo && (
+      <Profile name={userInfo.name} email={userInfo.email} />
+    )
   );
 };
 
