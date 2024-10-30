@@ -183,28 +183,30 @@ const login = (custosClientId: string, redirectUrl: string) => {
   //random string for code_verifier
   const generateCodeVerifier = (): string => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
-      let codeVerifier = '';
-      for (let i = 0; i < 43; i++) {
-          const randomIndex = Math.floor(Math.random() * characters.length);
-          codeVerifier += characters[randomIndex];
-      }
-      return codeVerifier;
-  };
+    let codeVerifier = '';
+    const length = 128; // Set to desired length between 43 and 128
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        codeVerifier += characters[randomIndex];
+    }
+    return codeVerifier;
+};
 
   // Generate code challenge from the code verifier using SHA-256
   const generateCodeChallenge = async (codeVerifier: string): Promise<string> => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const digest = await window.crypto.subtle.digest('SHA-256', data);
-    return Array.from(new Uint8Array(digest))
-        .map(byte => byte.toString(16).padStart(2, '0'))
-        .join('');
+      const encoder = new TextEncoder();
+      const data = encoder.encode(codeVerifier);
+      const digest = await window.crypto.subtle.digest('SHA-256', data);
+      return btoa(String.fromCharCode(...new Uint8Array(digest)))
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
+          .replace(/=+$/, ''); // Make it URL-safe
   };
 
   const generateState = (): string => {
-    const array = new Uint8Array(16);
-    window.crypto.getRandomValues(array);
-    return Array.from(array, byte => ('0' + byte.toString(16)).slice(-2)).join('');
+      const array = new Uint8Array(16);
+      window.crypto.getRandomValues(array);
+      return Array.from(array, (byte: number) => ('0' + byte.toString(16)).slice(-2)).join('');
   };
 
   // Generate the code_verifier and code_challenge parameters (specified in the custos playground)
@@ -229,7 +231,7 @@ const login = (custosClientId: string, redirectUrl: string) => {
 
 const App: React.FC = () => {
   const [custosClientId, setCustosClientId] = useState('');
-  const [redirectUrl, setRedirectUrl] = useState('');
+  const [redirectUrl, setRedirectUrl] = useState('http://localhost:3000/redirect');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
