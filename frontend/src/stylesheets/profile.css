@@ -1,0 +1,20 @@
+body {
+    background-color: #c4e0ee; /* Light beige background */
+    font-family: Arial, sans-serif;
+}
+.profile-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+.profile-container h5 {
+    font-size: 1.5rem; /* Bigger font for the title */
+    margin-bottom: 20px;
+}
+.profile-container p {
+    font-size: 1.2rem; /* Bigger font for the names */
+    margin: 10px 0;
+}
