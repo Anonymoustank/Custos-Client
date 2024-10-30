@@ -11,3 +11,4 @@ Run `pip install -r requirements.txt` to install the required packages.
 
 ## Frontend dependenices
 Navigate to the frontend folder, and run `npm install` to install the required node modules.
+fd
