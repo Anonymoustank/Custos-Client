@@ -22,10 +22,10 @@ const Callback: React.FC = () => {
 
   useEffect(() => {
     const fetchToken = async () => {
-      if (!code) return; // Ensure code is populated before making the request
+      if (!code) return;
 
       try {
-        const response = await axios.post('http://localhost:8000/api/v1/identity-management/token', {
+        const response = await axios.post('/api/v1/identity-management/token', {
           code: code,
           redirect_uri: localStorage.getItem('redirectUrl'),
           grant_type: 'authorization_code',
@@ -34,8 +34,8 @@ const Callback: React.FC = () => {
         });
 
         console.log('Response data:', response.data);
-        setAccessToken(response.data); // Store the access token
-        localStorage.setItem('access_token', response.data); // Optionally store in localStorage
+        setAccessToken(response.data.access_token); // Store the access token
+        localStorage.setItem('access_token', response.data.access_token); // Optionally store in localStorage
       } catch (error) {
         console.error('Error fetching token:', error);
       }
@@ -45,9 +45,10 @@ const Callback: React.FC = () => {
   }, [code]);
 
   useEffect(() => {
+    if (!localStorage.getItem('access_token')) return;
     const getUserInfo = async () => {
       try {
-        const response = await axios.post('http://localhost:8000/api/v1/user-management/userinfo', {
+        const response = await axios.post('/api/v1/user-management/userinfo', {
           access_token: localStorage.getItem('access_token'),
           clientId: localStorage.getItem('custosClientId'),
           code: code,

@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from dotenv import load_dotenv
 import httpx
+import urllib.parse
 
 load_dotenv()
 
@@ -22,18 +23,20 @@ class TokenView(View):
         grant_type = data.get('grant_type')
         code_verifier = data.get('code_verifier')
         clientId = data.get('clientId')
-        print(redirect_uri, grant_type, code_verifier, code_verifier, clientId)
+
+        encoded_code_verifier = urllib.parse.quote(code_verifier)
 
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
-                    f'https://api.playground.usecustos.org/api/v1/identity-management/token?code_verifier={code_verifier}',
+                    f'https://api.playground.usecustos.org/api/v1/identity-management/token?code_verifier={encoded_code_verifier}',
                     headers={'Content-Type': 'application/x-www-form-urlencoded'},
                     data={
                         'code': code,
                         'redirect_uri': redirect_uri,
-                        'grant_type': 'authorization_code',
+                        'grant_type': grant_type,
                         'client_id': clientId,
+                        'code_verifier': code_verifier
                     }
                 )
                 response.raise_for_status()
