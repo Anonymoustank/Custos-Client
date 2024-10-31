@@ -88,3 +88,20 @@ class UserInfoView(View):
 class TodoView(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
+
+from django.contrib.auth import get_user_model
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+User = get_user_model()
+
+@api_view(['POST'])
+def toggle_admin_status(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        user.isAdmin = not user.isAdmin
+        user.save()
+        return Response({"isAdmin": user.isAdmin})
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=404)
+
