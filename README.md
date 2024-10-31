@@ -1,7 +1,7 @@
 # Custos-Client
-This is a test client for the [Custos authentication application](https://airavata.apache.org/custos/).
+This is a test client for the [Apache Software Foundation's Custos authentication application](https://airavata.apache.org/custos/).
 
-The 'dummy data' that's displayed when you logged in is taken from [the Digital Ocean tutorial](https://www.digitalocean.com/community/tutorials/build-a-to-do-application-using-django-and-react).
+The 'dummy data' that's displayed is inspired by the data from [a Digital Ocean article](https://www.digitalocean.com/community/tutorials/build-a-to-do-application-using-django-and-react). Please note that the main focus of this project is showcasing the login process with Custos, the PKCE code challenge creation, and how tokens can have different scopes that allow certain users to have more privileges.
 
 ## Important Notes
 Within the application, you have the ability to specify the callback url. You can't specify any other url besides `http://localhost:3000/callback` because that's the only page in the frontend that can handle it. Also, if you want to run the backend on a different port, make sure to modify the proxy configuration within frontend/package.json.
