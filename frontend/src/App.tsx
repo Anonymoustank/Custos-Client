@@ -172,70 +172,109 @@
 
 // export default App;
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // inspiration for this comes from Georgia Tech student Kevin Yan
 // repo I used for inspiration: https://github.com/KevinYan2025/custos/blob/main/src/pages/LoginPage.jsx
-// I used a different UI entirely and different ways for generating the code verifier, code callenge, and generating state
+// I used a different UI entirely and different ways for generating the code verifier, code challenge, and generating state
 
+// Login function
 const login = (custosClientId: string, redirectUrl: string) => {
-  //random string for code_verifier
   const generateCodeVerifier = (): string => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
     let codeVerifier = '';
-    const length = 128; // Set to desired length between 43 and 128
+    const length = 128;
     for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * characters.length);
-        codeVerifier += characters[randomIndex];
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      codeVerifier += characters[randomIndex];
     }
     return codeVerifier;
-};
+  };
 
-  // Generate code challenge from the code verifier using SHA-256
   const generateCodeChallenge = async (codeVerifier: string): Promise<string> => {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(codeVerifier);
-      const digest = await window.crypto.subtle.digest('SHA-256', data);
-      return btoa(String.fromCharCode(...new Uint8Array(digest)))
-          .replace(/\+/g, '-')
-          .replace(/\//g, '_')
-          .replace(/=+$/, ''); // Make it URL-safe
+    const encoder = new TextEncoder();
+    const data = encoder.encode(codeVerifier);
+    const digest = await window.crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode(...new Uint8Array(digest)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
   };
 
   const generateState = (): string => {
-      const array = new Uint8Array(16);
-      window.crypto.getRandomValues(array);
-      return Array.from(array, (byte: number) => ('0' + byte.toString(16)).slice(-2)).join('');
+    const array = new Uint8Array(16);
+    window.crypto.getRandomValues(array);
+    return Array.from(array, (byte: number) => ('0' + byte.toString(16)).slice(-2)).join('');
   };
 
-  // Generate the code_verifier and code_challenge parameters (specified in the custos playground)
   const codeVerifier = generateCodeVerifier();
-  generateCodeChallenge(codeVerifier).then(codeChallenge => {
+  generateCodeChallenge(codeVerifier).then((codeChallenge) => {
     const state = generateState();
 
-    // Authorization URL with PKCE parameters
-    const custosAuthUrl = 
-    `https://api.playground.usecustos.org/api/v1/identity-management/authorize?response_type=code&client_id=${custosClientId}&redirect_uri=${encodeURIComponent(redirectUrl)}&scope=openid+profile+email&state=${encodeURIComponent(state)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=S256`;
+    const custosAuthUrl =
+      `https://api.playground.usecustos.org/api/v1/identity-management/authorize?response_type=code&client_id=${custosClientId}&redirect_uri=${encodeURIComponent(
+        redirectUrl
+      )}&scope=openid+profile+email&state=${encodeURIComponent(state)}&code_challenge=${encodeURIComponent(
+        codeChallenge
+      )}&code_challenge_method=S256`;
 
-    // Store the code_verifier in localStorage for later use
     localStorage.setItem('pkce_code_verifier', codeVerifier);
     localStorage.setItem('state', state);
-    localStorage.setItem('redirectUrl', redirectUrl)
-    localStorage.setItem('custosClientId', custosClientId)
+    localStorage.setItem('redirectUrl', redirectUrl);
+    localStorage.setItem('custosClientId', custosClientId);
 
-    // Redirect the user to Custos for authentication
     window.location.href = custosAuthUrl;
   });
-}
+};
 
 const App: React.FC = () => {
   const [custosClientId, setCustosClientId] = useState('');
   const [redirectUrl, setRedirectUrl] = useState('http://localhost:3000/callback');
+  const [isAdmin, setIsAdmin] = useState(false); // State for admin status
+  const [todoList, setTodoList] = useState([]); // State for Todo list
+
+  // Check admin status on load or login
+  useEffect(() => {
+    const userId = "replace_with_user_id"; // Replace with the actual user ID
+    axios.get(`/toggle-admin/${userId}/`)
+      .then(response => {
+        setIsAdmin(response.data.isAdmin); // Assuming backend response has {"isAdmin": true/false}
+      })
+      .catch(error => {
+        console.error('Error fetching admin status:', error);
+      });
+  }, []);
+
+  // Fetch Todo list if user is an admin
+  useEffect(() => {
+    if (isAdmin) {
+      axios.get('/api/todos/')
+        .then(response => {
+          setTodoList(response.data); // Set the fetched Todo list
+        })
+        .catch(error => {
+          console.error('Error fetching todo list:', error);
+        });
+    }
+  }, [isAdmin]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     login(custosClientId, redirectUrl);
+  };
+
+  // Toggle Admin Status
+  const toggleAdminStatus = () => {
+    const userId = "replace_with_user_id"; // Replace with the actual user ID
+    axios.post(`/toggle-admin/${userId}/`)
+      .then(response => {
+        setIsAdmin(response.data.isAdmin); // Update admin status
+      })
+      .catch(error => {
+        console.error('Error toggling admin status:', error);
+      });
   };
 
   return (
@@ -267,6 +306,25 @@ const App: React.FC = () => {
           </div>
           <button type="submit" className="btn btn-primary w-100">Login</button>
         </form>
+
+        {/* Toggle Admin Status Button */}
+        <button onClick={toggleAdminStatus} className="btn btn-secondary w-100 mt-3">
+          {isAdmin ? 'Remove Admin Access' : 'Grant Admin Access'}
+        </button>
+
+        {/* Admin-only Todo List */}
+        {isAdmin && (
+          <div className="mt-4">
+            <h5>Admin Todo List</h5>
+            <ul className="list-group list-group-flush">
+              {todoList.map((todo: any) => (
+                <li key={todo.id} className="list-group-item">
+                  <strong>{todo.title}</strong>: {todo.description}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
