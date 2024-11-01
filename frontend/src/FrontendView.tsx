@@ -147,7 +147,7 @@ class FrontendView extends Component<{}, AppState> {
                   className="btn btn-primary"
                   onClick={this.createItem}
                 >
-                  Add task
+                  Add task (Admin Only)
                 </button>
               </div>
               {this.renderTabList()}
