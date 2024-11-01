@@ -67,6 +67,7 @@ const Callback: React.FC = () => {
           isAdmin: isAdmin
         });
         localStorage.setItem('isAdmin', isAdmin.toString());
+        console.log(localStorage.getItem('isAdmin'));
       } catch (error) {
         console.error('Error getting user data: ', error);
       }

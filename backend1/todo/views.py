@@ -122,8 +122,6 @@ class RemoveAdmin(View):
         clientId = data.get('clientId')
         username = data.get('username')
 
-        print(access_token, clientId, username)
-
         encoded_username = urllib.parse.quote(username)
 
         async with httpx.AsyncClient() as client:

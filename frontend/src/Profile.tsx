@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './stylesheets/profile.css';
 import axios from 'axios';
-
+import FrontendView from './FrontendView';
 
 interface ProfileProps {
     name: string;
@@ -11,66 +11,67 @@ interface ProfileProps {
     isAdmin: boolean;
 }
 
-const Profile: React.FC<ProfileProps> = ({ name, username, email, isAdmin }) => {
-        const addAdmin = async () => {
-    
-          try {
-            const response = await axios.post('/api/v1/group-management/addAdmin', {
-              clientId: localStorage.getItem('custosClientId'),
-              groupId: 'admin',
-              username: username,
-              access_token: localStorage.getItem('accessToken'),
-            });
-            
-            localStorage.setItem('isAdmin', "true")
+const Profile: React.FC<ProfileProps> = ({ name, username, email, isAdmin: initialAdminStatus }) => {
+    const [isAdmin, setIsAdmin] = useState(initialAdminStatus);
 
-          } catch (error) {
-            console.error('Error fetching token:', error);
-          }
-        };
+    useEffect(() => {
+        setIsAdmin(initialAdminStatus);
+    }, [initialAdminStatus]);
 
-        const removeAdmin = async () => {
-    
-            try {
-              const response = await axios.post('/api/v1/group-management/removeAdmin', {
+    const addAdmin = async () => {
+        try {
+            await axios.post('/api/v1/group-management/addAdmin', {
                 clientId: localStorage.getItem('custosClientId'),
                 groupId: 'admin',
                 username: username,
                 access_token: localStorage.getItem('accessToken'),
-              });
-              
-              localStorage.setItem('isAdmin', "true")
-  
-            } catch (error) {
-              console.error('Error fetching token:', error);
-            }
-          };
+            });
+            setIsAdmin(true);
+        } catch (error) {
+            console.error('Error adding admin:', error);
+        }
+    };
 
-        const toggleAdminStatus = () => {
-            if (!isAdmin) {
-                addAdmin();
-            } else {
-                removeAdmin();
-            }
-        };
+    const removeAdmin = async () => {
+        try {
+            await axios.post('/api/v1/group-management/removeAdmin', {
+                clientId: localStorage.getItem('custosClientId'),
+                groupId: 'admin',
+                username: username,
+                access_token: localStorage.getItem('accessToken'),
+            });
+            setIsAdmin(false);
+        } catch (error) {
+            console.error('Error removing admin:', error);
+        }
+    };
+
+    const toggleAdminStatus = () => {
+        if (!isAdmin) {
+            addAdmin();
+        } else {
+            removeAdmin();
+        }
+    };
 
     return (
-        <div className="container d-flex justify-content-center align-items-center vh-100">
-
+        <div className={`container d-flex ${isAdmin ? 'flex-column align-items-center' : 'vh-100 justify-content-center align-items-center'}`}>
             <div className="profile-container">
-
                 <h5>Profile</h5>
                 <p><strong>Name:</strong> {name}</p>
-                {/* <p><strong>Username:</strong> {username}</p> */}
                 <p><strong>Email:</strong> {email}</p>
                 <p><strong>Username:</strong> {username}</p>
 
-                {/* Toggle Admin Status Button */}
                 <button onClick={toggleAdminStatus} className="btn btn-secondary w-100 mt-3">
-                
-                {isAdmin ? 'Remove Admin Access' : 'Grant Admin Access'}
+                    {'Click to Toggle Admin Status'}
                 </button>
             </div>
+
+            {isAdmin && (
+                <div className="frontend-view-container">
+                    <FrontendView />
+                </div>
+            )}
         </div>
     );
 };
