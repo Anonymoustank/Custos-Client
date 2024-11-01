@@ -15,3 +15,9 @@ Run `pip install -r requirements.txt` to install the required packages.
 ## Frontend dependenices
 Navigate to the frontend folder, and run `npm install` to install the required node modules.
 
+## API endpoints used
+- `api/v1/identity-management/token` to get the token after exchanging the code from the code challenge
+- `api/v1/user-management/userinfo` to get user info (including name, username, and groups)
+- `api/v1/group-management/groups/{groupId}/members` to add the user to the admin group
+- `api/v1/group-management/groups/admin/members/{userId}` to delete the user from the group
+
