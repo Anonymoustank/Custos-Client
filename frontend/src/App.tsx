@@ -1,179 +1,4 @@
-// import React, { Component } from "react";
-// import Modal from "./components/Modal";
-// import axios from "axios";
-
-// interface TodoItem {
-//   id?: number;
-//   title: string;
-//   description: string;
-//   completed: boolean;
-// }
-
-// interface AppState {
-//   viewCompleted: boolean;
-//   todoList: TodoItem[];
-//   modal: boolean;
-//   activeItem: TodoItem;
-// }
-
-// class App extends Component<{}, AppState> {
-//   constructor(props: {}) {
-//     super(props);
-//     this.state = {
-//       viewCompleted: false,
-//       todoList: [],
-//       modal: false,
-//       activeItem: {
-//         title: "",
-//         description: "",
-//         completed: false,
-//       },
-//     };
-//   }
-
-//   componentDidMount() {
-//     this.refreshList();
-//   }
-
-//   refreshList = () => {
-//     axios
-//       .get("/api/todos/")
-//       .then((res) => this.setState({ todoList: res.data }))
-//       .catch((err) => console.log(err));
-//   };
-
-//   toggle = () => {
-//     this.setState({ modal: !this.state.modal });
-//   };
-
-//   handleSubmit = (item: TodoItem) => {
-//     this.toggle();
-
-//     if (item.id) {
-//       axios
-//         .put(`/api/todos/${item.id}/`, item)
-//         .then((res) => this.refreshList());
-//       return;
-//     }
-//     axios
-//       .post("/api/todos/", item)
-//       .then((res) => this.refreshList());
-//   };
-
-//   handleDelete = (item: TodoItem) => {
-//     axios
-//       .delete(`/api/todos/${item.id}/`)
-//       .then((res) => this.refreshList());
-//   };
-
-//   createItem = () => {
-//     const item: TodoItem = { title: "", description: "", completed: false };
-
-//     this.setState({ activeItem: item, modal: !this.state.modal });
-//   };
-
-//   editItem = (item: TodoItem) => {
-//     this.setState({ activeItem: item, modal: !this.state.modal });
-//   };
-
-//   displayCompleted = (status: boolean) => {
-//     this.setState({ viewCompleted: status });
-//   };
-
-//   renderTabList = () => {
-//     return (
-//       <div className="nav nav-tabs">
-//         <span
-//           onClick={() => this.displayCompleted(true)}
-//           className={this.state.viewCompleted ? "nav-link active" : "nav-link"}
-//         >
-//           Complete
-//         </span>
-//         <span
-//           onClick={() => this.displayCompleted(false)}
-//           className={this.state.viewCompleted ? "nav-link" : "nav-link active"}
-//         >
-//           Incomplete
-//         </span>
-//       </div>
-//     );
-//   };
-
-//   renderItems = () => {
-//     const { viewCompleted, todoList } = this.state;
-//     const newItems = todoList.filter(
-//       (item) => item.completed === viewCompleted
-//     );
-
-//     return newItems.map((item) => (
-//       <li
-//         key={item.id}
-//         className="list-group-item d-flex justify-content-between align-items-center"
-//       >
-//         <span
-//           className={`todo-title mr-2 ${
-//             this.state.viewCompleted ? "completed-todo" : ""
-//           }`}
-//           title={item.description}
-//         >
-//           {item.title}
-//         </span>
-//         <span>
-//           <button
-//             className="btn btn-secondary mr-2"
-//             onClick={() => this.editItem(item)}
-//           >
-//             Edit
-//           </button>
-//           <button
-//             className="btn btn-danger"
-//             onClick={() => this.handleDelete(item)}
-//           >
-//             Delete
-//           </button>
-//         </span>
-//       </li>
-//     ));
-//   };
-
-//   render() {
-//     return (
-//       <main className="container">
-//         <h1 className="text-white text-uppercase text-center my-4">Todo app</h1>
-//         <div className="row">
-//           <div className="col-md-6 col-sm-10 mx-auto p-0">
-//             <div className="card p-3">
-//               <div className="mb-4">
-//                 <button
-//                   className="btn btn-primary"
-//                   onClick={this.createItem}
-//                 >
-//                   Add task
-//                 </button>
-//               </div>
-//               {this.renderTabList()}
-//               <ul className="list-group list-group-flush border-top-0">
-//                 {this.renderItems()}
-//               </ul>
-//             </div>
-//           </div>
-//         </div>
-//         {this.state.modal ? (
-//           <Modal
-//             activeItem={this.state.activeItem}
-//             toggle={this.toggle}
-//             onSave={this.handleSubmit}
-//           />
-//         ) : null}
-//       </main>
-//     );
-//   }
-// }
-
-// export default App;
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // inspiration for this comes from Georgia Tech student Kevin Yan
@@ -232,50 +57,14 @@ const login = (custosClientId: string, redirectUrl: string) => {
 const App: React.FC = () => {
   const [custosClientId, setCustosClientId] = useState('');
   const [redirectUrl, setRedirectUrl] = useState('http://localhost:3000/callback');
-  const [isAdmin, setIsAdmin] = useState(false); // State for admin status
-  const [todoList, setTodoList] = useState([]); // State for Todo list
 
   // Check admin status on load or login
-  useEffect(() => {
-    const userId = "replace_with_user_id"; // Replace with the actual user ID
-    axios.get(`/toggle-admin/${userId}/`)
-      .then(response => {
-        setIsAdmin(response.data.isAdmin); // Assuming backend response has {"isAdmin": true/false}
-      })
-      .catch(error => {
-        console.error('Error fetching admin status:', error);
-      });
-  }, []);
-
-  // Fetch Todo list if user is an admin
-  useEffect(() => {
-    if (isAdmin) {
-      axios.get('/api/todos/')
-        .then(response => {
-          setTodoList(response.data); // Set the fetched Todo list
-        })
-        .catch(error => {
-          console.error('Error fetching todo list:', error);
-        });
-    }
-  }, [isAdmin]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     login(custosClientId, redirectUrl);
   };
 
-  // Toggle Admin Status
-  const toggleAdminStatus = () => {
-    const userId = "replace_with_user_id"; // Replace with the actual user ID
-    axios.post(`/toggle-admin/${userId}/`)
-      .then(response => {
-        setIsAdmin(response.data.isAdmin); // Update admin status
-      })
-      .catch(error => {
-        console.error('Error toggling admin status:', error);
-      });
-  };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -306,25 +95,6 @@ const App: React.FC = () => {
           </div>
           <button type="submit" className="btn btn-primary w-100">Login</button>
         </form>
-
-        {/* Toggle Admin Status Button */}
-        <button onClick={toggleAdminStatus} className="btn btn-secondary w-100 mt-3">
-          {isAdmin ? 'Remove Admin Access' : 'Grant Admin Access'}
-        </button>
-
-        {/* Admin-only Todo List */}
-        {isAdmin && (
-          <div className="mt-4">
-            <h5>Admin Todo List</h5>
-            <ul className="list-group list-group-flush">
-              {todoList.map((todo: any) => (
-                <li key={todo.id} className="list-group-item">
-                  <strong>{todo.title}</strong>: {todo.description}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
       </div>
     </div>
   );

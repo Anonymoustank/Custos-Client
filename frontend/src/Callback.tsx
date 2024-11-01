@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Profile from './Profile';
 
 interface UserInfo {
   name: string;
   email: string;
-  username: string;
+  preferred_username: string;
+  isAdmin: boolean;
 }
 
 const Callback: React.FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>({
     name: "Loading...",
     email: "Loading...",
-    username: "Loading..."
+    preferred_username: "Loading...",
+    isAdmin: false
   });
   const location = useLocation();
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -38,6 +40,7 @@ const Callback: React.FC = () => {
         });
 
         setAccessToken(response.data.access_token); // Store the access token
+        localStorage.setItem("accessToken", response.data.access_token);
       } catch (error) {
         console.error('Error fetching token:', error);
       }
@@ -47,7 +50,7 @@ const Callback: React.FC = () => {
   }, [code]);
 
   useEffect(() => {
-    if (!localStorage.getItem('access_token')) return;
+    if (!localStorage.getItem('accessToken')) return; // Corrected key to 'accessToken'
     const getUserInfo = async () => {
       try {
         const response = await axios.post('/api/v1/user-management/userinfo', {
@@ -55,7 +58,15 @@ const Callback: React.FC = () => {
           clientId: localStorage.getItem('custosClientId'),
           code: code,
         });
-        setUserInfo(response.data);
+        const userData = response.data;
+        const isAdmin = userData.groups.includes("admin");
+        setUserInfo({
+          name: userData.name,
+          email: userData.email,
+          preferred_username: userData.preferred_username,
+          isAdmin: isAdmin
+        });
+        localStorage.setItem('isAdmin', isAdmin.toString());
       } catch (error) {
         console.error('Error getting user data: ', error);
       }
@@ -65,7 +76,7 @@ const Callback: React.FC = () => {
 
   return (
     userInfo && (
-      <Profile name={userInfo.name} email={userInfo.email} />
+      <Profile name={userInfo.name} username={userInfo.preferred_username} email={userInfo.email} isAdmin={userInfo.isAdmin} />
     )
   );
 };
