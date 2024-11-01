@@ -93,15 +93,13 @@ class AddAdmin(View):
         clientId = data.get('clientId')
         username = data.get('username')
 
-        print(username, clientId, access_token)
-
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
                     'https://api.playground.usecustos.org/api/v1/group-management/groups/admin/members',
                     headers={
-                        'client_id': clientId,
                         'Content-Type': 'application/json',
+                        'client_id': clientId,
                         'Authorization': f'Bearer {access_token}'
                     },
                     data={
