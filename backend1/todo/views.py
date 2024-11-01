@@ -85,23 +85,60 @@ class UserInfoView(View):
             except httpx.RequestError as e:
                 return JsonResponse({'error': str(e)}, status=500)
 
+@method_decorator(csrf_exempt, name='dispatch')
+class AddAdmin(View):
+    async def post(self, request):
+        data = json.loads(request.body)
+        access_token = data.get('access_token')
+        clientId = data.get('clientId')
+        username = data.get('username')
+
+        print(username, clientId, access_token)
+
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(
+                    'https://api.playground.usecustos.org/api/v1/group-management/groups/admin/members',
+                    headers={
+                        'client_id': clientId,
+                        'Content-Type': 'application/json',
+                        'Authorization': f'Bearer {access_token}'
+                    },
+                    data={
+                        'username': username,
+                        'type': 'admin'
+                    }
+                )
+                response.raise_for_status()
+                return JsonResponse(response.json())
+            except httpx.RequestError as e:
+                return JsonResponse({'error': str(e)}, status=500)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class RemoveAdmin(View):
+    async def post(self, request):
+        data = json.loads(request.body)
+        access_token = data.get('access_token')
+        clientId = data.get('clientId')
+        username = data.get('username')
+
+        encoded_username = urllib.parse.quote(username)
+
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.delete(
+                    f'https://api.playground.usecustos.org/api/v1/group-management/groups/admin/members/{encoded_username}',
+                    headers={
+                        'Content-Type': 'application/json',
+                        'Authorization': f'Bearer {access_token}',
+                        'client_id': clientId
+                    }
+                )
+                return JsonResponse({'status': True})
+            except httpx.RequestError as e:
+                return JsonResponse({'error': str(e)}, status=500)
+
 class TodoView(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
     queryset = Todo.objects.all()
-
-from django.contrib.auth import get_user_model
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
-User = get_user_model()
-
-@api_view(['POST'])
-def toggle_admin_status(request, user_id):
-    try:
-        user = User.objects.get(id=user_id)
-        user.isAdmin = not user.isAdmin
-        user.save()
-        return Response({"isAdmin": user.isAdmin})
-    except User.DoesNotExist:
-        return Response({"error": "User not found"}, status=404)
 

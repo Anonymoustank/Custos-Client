@@ -4,12 +4,15 @@ body {
 }
 .profile-container {
     background-color: #fff;
+    margin-top: 50px; /* Adjust this value to control the vertical spacing */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 300px;
     text-align: center;
+    margin-bottom: 20px;
 }
+
 .profile-container h5 {
     font-size: 1.5rem; /* Bigger font for the title */
     margin-bottom: 20px;
@@ -17,4 +20,21 @@ body {
 .profile-container p {
     font-size: 1.2rem; /* Bigger font for the names */
     margin: 10px 0;
+}
+
+.profile-container {
+    text-align: center;
+    margin-bottom: 20px; /* Space between profile and FrontendView */
+}
+
+.frontend-view-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Adjust for desired spacing */
+}
+
+.frontend-view-container > * {
+    width: 100%; /* Or a specific width if you want it constrained */
+    max-width: 600px; /* Optional: set a max-width for FrontendView */
 }
