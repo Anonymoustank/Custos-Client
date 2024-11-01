@@ -93,6 +93,8 @@ class AddAdmin(View):
         clientId = data.get('clientId')
         username = data.get('username')
 
+        dataJson = json.dumps({'username': username,'type': 'admin'})
+
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
@@ -102,10 +104,7 @@ class AddAdmin(View):
                         'client_id': clientId,
                         'Authorization': f'Bearer {access_token}'
                     },
-                    data={
-                        'username': username,
-                        'type': 'admin'
-                    }
+                    data=dataJson
                 )
                 response.raise_for_status()
                 return JsonResponse(response.json())
