@@ -1,5 +1,5 @@
 # Custos-Client
-This is a test client for the [Apache Software Foundation's Custos authentication application](https://airavata.apache.org/custos/).
+This is a test client for the [Apache Software Foundation's Custos authentication application](https://airavata.apache.org/custos/). It uses group-based authorization to manage access to portions of the application.
 
 The 'dummy data' that's displayed is inspired by the data from [a Digital Ocean article](https://www.digitalocean.com/community/tutorials/build-a-to-do-application-using-django-and-react). Please note that the main focus of this project is showcasing the login process with Custos, the PKCE code challenge creation, and how tokens can have different scopes that allow certain users to have more privileges.
 
