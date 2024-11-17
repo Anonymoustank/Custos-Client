@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package userManagementService;
+
+// UserProfile model
+message UserProfile {
+  string userId = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  string phoneNumber = 5;
+  string nickname = 6;
+  repeated string groupIds = 7;
+}
+
+// Group model
+message Group {
+  string groupId = 1;
+  string name = 2;
+  string description = 3;
+  repeated string scopes = 4;
+  repeated string containedUserIds = 5;
+}
+
+message CreateUserRequest {
+  UserProfile user = 1;
+}
+
+message CreateUserResponse {
+  string message = 1;
+  UserProfile user = 2;
+}
+
+message GetUserRequest {
+  string userId = 1;
+}
+
+message GetUserResponse {
+  UserProfile user = 1;
+}
+
+message CreateGroupRequest {
+  Group group = 1;
+}
+
+message CreateGroupResponse {
+  string message = 1;
+  Group group = 2;
+}
+
+message GetGroupRequest {
+  string groupId = 1;
+}
+
+message GetGroupResponse {
+  Group group = 1;
+}
+
+service UserManagementService {
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse);
+  rpc GetGroup(GetGroupRequest) returns (GetGroupResponse);
+}
