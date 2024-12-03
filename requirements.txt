@@ -2,3 +2,5 @@ django
 django-rest-framework
 django-cors-headers
 httpx
+grpcio
+grpcio-tools

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package rpcManagement;
+import "UserProfile.proto";
+import "google/protobuf/empty.proto";
+import "Group.proto";
+service UserManagementService {
+  rpc CreateUserProfile(UserProfile) returns (UserProfile);
+  rpc GetUserProfile(UserProfile) returns (UserProfile);
+  rpc UpdateUserProfile(UserProfile) returns (UserProfile);
+  rpc DeleteUserProfile(UserProfile) returns (google.protobuf.Empty);
+
+  rpc CreateGroup(Group) returns (Group);
+  rpc GetGroup(Group) returns (Group);
+  rpc UpdateGroup(Group) returns (Group);
+  rpc DeleteGroup(Group) returns (google.protobuf.Empty);
+}
