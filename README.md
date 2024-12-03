@@ -21,3 +21,18 @@ Navigate to the frontend folder, and run `npm install` to install the required n
 - `api/v1/group-management/groups/{groupId}/members` to add the user to the admin group
 - `api/v1/group-management/groups/admin/members/{userId}` to delete the user from the group
 
+## RPC Features and User Management
+You can use RPCs for user management by navigating to:http://localhost:3000/userProfileForm
+
+Setup Instructions for RPC and Backend Servers:
+
+1.) Start the Proxy Server
+In a new terminal tab or window, run: `node Custos-Client/frontend/src/proxyServer.js`
+
+2.) Start the RPC Server and Django Server
+In another terminal tab or window, run: `python Custos-Client/backend1/backend1/proto/server.py`
+
+Verifying User Creation:
+- Open the Network Tab in your browser's Developer Tools (Inspect Element).
+- Look for relevant RPC requests and their responses.
+
