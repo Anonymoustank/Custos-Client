@@ -1,0 +1,9 @@
+syntax = "proto3";
+package rpcManagement;
+message UserProfile {
+  string userId = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  repeated string groupIds = 5;
+}

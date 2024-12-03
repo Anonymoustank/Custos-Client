@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import threading
+from django.core.management import call_command
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -125,3 +128,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
+
+# def run_grpc_server():
+#     call_command('backend1/run_grpc_server')
+
+# if os.environ.get('RUN_MAIN') == 'true':
+#     threading.Thread(target=run_grpc_server).start()

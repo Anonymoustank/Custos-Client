@@ -1,0 +1,10 @@
+syntax = "proto3";
+package rpcManagement;
+import "UserProfile.proto";
+message Group {
+  string groupId = 1;
+  string name = 2;
+  string description = 3;
+  repeated string scopes = 4;
+  repeated UserProfile members = 5;
+}
