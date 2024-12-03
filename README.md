@@ -27,10 +27,12 @@ You can use RPCs for user management by navigating to:http://localhost:3000/user
 Setup Instructions for RPC and Backend Servers:
 
 1.) Start the Proxy Server
-In a new terminal tab or window, run: `node Custos-Client/frontend/src/proxyServer.js`
+In a new terminal tab or window, run: 
+`node Custos-Client/frontend/src/proxyServer.js`
 
 2.) Start the RPC Server and Django Server
-In another terminal tab or window, run: `python Custos-Client/backend1/backend1/proto/server.py`
+In another terminal tab or window, run: 
+`python Custos-Client/backend1/backend1/proto/server.py`
 
 Verifying User Creation:
 - Open the Network Tab in your browser's Developer Tools (Inspect Element).
