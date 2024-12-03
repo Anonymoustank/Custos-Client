@@ -27,11 +27,13 @@ You can use gRPCs for user management by navigating to:http://localhost:3000/use
 Setup Instructions for gRPC and Backend Servers:
 
 1.) Start the Proxy Server
-In a new terminal tab or window, run: 
+In a new terminal tab or window, run:
+
 `node Custos-Client/frontend/src/proxyServer.js`
 
 2.) Start the gRPC Server and Django Server
-In another terminal tab or window, run: 
+In another terminal tab or window, run:
+
 `python Custos-Client/backend1/backend1/proto/server.py`
 
 Verifying User Creation:
