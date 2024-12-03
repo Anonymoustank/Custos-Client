@@ -129,8 +129,8 @@ CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
 
-def run_grpc_server():
-    call_command('backend1/run_grpc_server')
+# def run_grpc_server():
+#     call_command('backend1/run_grpc_server')
 
-if os.environ.get('RUN_MAIN') == 'true':
-    threading.Thread(target=run_grpc_server).start()
+# if os.environ.get('RUN_MAIN') == 'true':
+#     threading.Thread(target=run_grpc_server).start()
