@@ -26,7 +26,7 @@ You can use gRPCs for user management by navigating to:http://localhost:3000/use
 
 Setup Instructions for gRPC and Backend Servers:
 
-1.) Start the Proxy Server
+1.) Start the Express Proxy Server
 In a new terminal tab or window, run:
 
 `node Custos-Client/frontend/src/proxyServer.js`
@@ -39,4 +39,8 @@ In another terminal tab or window, run:
 Verifying User Creation:
 - Open the Network Tab in your browser's Developer Tools (Inspect Element).
 - Look for relevant gRPC requests and their responses.
+
+## Proxy Server Endpoints
+- `/createUserProfile`
+- `/createGroup`
 
