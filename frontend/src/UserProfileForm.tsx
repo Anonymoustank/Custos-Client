@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import './UserProfileForm.css'; // Import CSS for styling
+import './stylesheets/UserProfileForm.css'; // Import CSS for styling
 
 interface UserProfile {
   userId: string;
