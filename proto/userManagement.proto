@@ -1,0 +1,47 @@
+// Define the syntax and package
+syntax = "proto3";
+
+package usermanagement;
+
+// Message for User Profile
+message UserProfile {
+    string username = 1; // Unique username for the user
+    string password = 2; // Password for the user
+    string group = 3;    // Group the user belongs to
+}
+
+// Message for Group
+message Group {
+    string name = 1;      // Name of the group
+}
+
+// Service definition for user and group management
+service UserManagementService {
+    // Create a new user
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+
+    // Create a new group
+    rpc CreateGroup (CreateGroupRequest) returns (CreateGroupResponse);
+}
+
+// Request for creating a user
+message CreateUserRequest {
+    UserProfile user = 1; // User details
+}
+
+// Response for creating a user
+message CreateUserResponse {
+    string message = 1; // Success or error message
+    UserProfile user = 2; // Created user profile
+}
+
+// Request for creating a group
+message CreateGroupRequest {
+    Group group = 1; // Group details
+}
+
+// Response for creating a group
+message CreateGroupResponse {
+    string message = 1; // Success or error message
+    Group group = 2; // Created group details
+}
