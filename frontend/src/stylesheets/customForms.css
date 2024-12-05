@@ -1,0 +1,120 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .user-profile-form {
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .user-profile-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .submit-button, .view-groups-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .view-groups-button {
+    margin-top: 10px;
+  }
+  
+  .submit-button:hover, .view-groups-button:hover {
+    background-color: #0056b3;
+  }
+
+  .addScopeButton{
+    margin-bottom: 10px;
+  }
+  .removeScopeButton {
+    margin-top: 10px;
+  }
+
+  #description {
+    width: 100%
+  }
+
+  .group-list {
+    max-width: 600px;
+    min-width: 400px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .group-list h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .group-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fafafa;
+    transition: background-color 0.3s ease;
+  }
+  
+  .group-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .group-item h3 {
+    margin: 0 0 10px;
+    color: #007bff;
+  }
+  
+  .group-item p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  .group-item p:last-child {
+    margin-bottom: 0;
+  }
+
+  .delete-button {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    color: darkred;
+  }

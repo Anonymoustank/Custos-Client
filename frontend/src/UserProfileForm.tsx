@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import './stylesheets/UserProfileForm.css'; // Import CSS for styling
+import { useNavigate, useLocation } from 'react-router-dom';
+import './stylesheets/customForms.css'; // Import CSS for styling
 
 interface UserProfile {
   userId: string;
@@ -13,12 +14,17 @@ interface UserProfileFormProps {
 }
 
 const UserProfileForm: React.FC<UserProfileFormProps> = ({ onSubmit }) => {
+  const location = useLocation();
+  const emailFromProfile = location.state?.email || '';
+
   const [userProfile, setUserProfile] = useState<UserProfile>({
     userId: '',
     firstName: '',
     lastName: '',
-    email: ''
+    email: emailFromProfile
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,9 +42,12 @@ const UserProfileForm: React.FC<UserProfileFormProps> = ({ onSubmit }) => {
         body: JSON.stringify(userProfile)
       });
       const data = await response.json();
+      alert('SUCCESS!');
       onSubmit(data);
+      navigate('/groupForm'); // Redirect to /groupForm
     } catch (error) {
       console.error('Error submitting user profile:', error);
+      alert('Error submitting user profile');
     }
   };
 

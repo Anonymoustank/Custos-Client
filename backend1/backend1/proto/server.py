@@ -6,8 +6,10 @@ import signal
 import os
 import sys
 import UserManagementService_pb2_grpc
+import UserManagementService_pb2
 import UserProfile_pb2
 import Group_pb2
+import json
 from google.protobuf.empty_pb2 import Empty
 
 class UserManagementServiceServicer(UserManagementService_pb2_grpc.UserManagementServiceServicer):
@@ -74,19 +76,25 @@ class UserManagementServiceServicer(UserManagementService_pb2_grpc.UserManagemen
             self.groups.remove(group)
             return Empty()
         context.set_code(grpc.StatusCode.NOT_FOUND)
-        context.set.details('Group not found')
+        context.set_details('Group not found')
         return Empty()
+
+    def GetAllGroups(self, request, context):
+        group_list = UserManagementService_pb2.GroupList()
+        group_list.groups.extend(self.groups)
+        return group_list
 
 def run_django_server():
     # Use the full path to the Python interpreter
+    print("Starting Django server...")
     python_executable = sys.executable
     process = subprocess.Popen([python_executable, '../../manage.py', 'runserver'])
     process.wait()
 
-def stop_django_server(signal, frame):
-    if django_process:
-        django_process.terminate()
-        django_process.wait()
+# def stop_django_server(signal, frame):
+#     if django_process:
+#         django_process.terminate()
+#         django_process.wait()
 
 def serve():
     # Start Django server in a separate thread
@@ -97,11 +105,8 @@ def serve():
     UserManagementService_pb2_grpc.add_UserManagementServiceServicer_to_server(UserManagementServiceServicer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
+    print("Starting gRPC server...")
     server.wait_for_termination()
-
-    # Ensure the Django server stops when the gRPC server stops
-    signal.signal(signal.SIGINT, stop_django_server)
-    signal.signal(signal.SIGTERM, stop_django_server)
 
 if __name__ == '__main__':
     serve()

@@ -35,6 +35,6 @@ body {
 }
 
 .frontend-view-container > * {
-    width: 100%; /* Or a specific width if you want it constrained */
-    max-width: 600px; /* Optional: set a max-width for FrontendView */
+    max-width: 800px;
+    min-width: 600px;
 }
