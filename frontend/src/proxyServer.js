@@ -55,6 +55,39 @@ app.post('/createUserProfile', (req, res) => {
   });
 });
 
+app.post('/createGroup', (req, res) => {
+  const group = req.body;
+  client.CreateGroup(group, (error, response) => {
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      console.log(response);
+      res.json(response);
+    }
+  });
+});
+
+app.delete('/deleteGroup', (req, res) => {
+  const group = req.body;
+  client.DeleteGroup(group, (error, response) => {
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      res.json(response);
+    }
+  });
+});
+
+app.get('/getAllGroups', (req, res) => {
+  client.GetAllGroups({}, (error, response) => {
+    if (error) {
+      res.status(500).send(error);
+    } else {
+      res.json(response.groups);
+    }
+  });
+});
+
 app.listen(4000, () => {
   console.log('Proxy server is running on port 4000 (ensure the rpc server has also started!)');
 });

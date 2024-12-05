@@ -13,4 +13,9 @@ service UserManagementService {
   rpc GetGroup(Group) returns (Group);
   rpc UpdateGroup(Group) returns (Group);
   rpc DeleteGroup(Group) returns (google.protobuf.Empty);
+  rpc GetAllGroups(google.protobuf.Empty) returns (GroupList);
+}
+
+message GroupList {
+  repeated Group groups = 1;
 }

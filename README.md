@@ -22,16 +22,16 @@ Navigate to the frontend folder, and run `npm install` to install the required n
 - `api/v1/group-management/groups/admin/members/{userId}` to delete the user from the group
 
 ## gRPC Features and User Management
-You can use gRPCs for user management by navigating to:http://localhost:3000/userProfileForm
+You can use gRPCs for user management by navigating to http://localhost:3000/userProfileForm (instructions are above for starting the frontend)
 
 Setup Instructions for gRPC and Backend Servers:
 
-1.) Start the Proxy Server
+1.) Start the Express Proxy Server
 In a new terminal tab or window, run:
 
 `node Custos-Client/frontend/src/proxyServer.js`
 
-2.) Start the gRPC Server and Django Server
+2.) Start the gRPC Server and Django Server simultaneously (don't use the instructions above the gRPC section of the README for starting the backend if you want the gRPC functionality)
 In another terminal tab or window, run:
 
 `python Custos-Client/backend1/backend1/proto/server.py`
@@ -39,4 +39,10 @@ In another terminal tab or window, run:
 Verifying User Creation:
 - Open the Network Tab in your browser's Developer Tools (Inspect Element).
 - Look for relevant gRPC requests and their responses.
+
+## Proxy Server Endpoints
+- `/createUserProfile`
+- `/createGroup`
+- `/deleteGroup`
+- `/getAllGroups`
 

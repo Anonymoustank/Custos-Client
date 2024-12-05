@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './stylesheets/profile.css';
 import axios from 'axios';
 import FrontendView from './FrontendView';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileProps {
     name: string;
@@ -13,6 +14,7 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ name, username, email, isAdmin: initialAdminStatus }) => {
     const [isAdmin, setIsAdmin] = useState(initialAdminStatus);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsAdmin(initialAdminStatus);
@@ -54,6 +56,10 @@ const Profile: React.FC<ProfileProps> = ({ name, username, email, isAdmin: initi
         }
     };
 
+    const handleViewGroups = () => {
+        navigate('/userProfileForm', { state: { email } });
+    };
+
     return (
         <div className={`container d-flex ${isAdmin ? 'flex-column align-items-center' : 'vh-100 justify-content-center align-items-center'}`}>
             <div className="profile-container">
@@ -64,6 +70,9 @@ const Profile: React.FC<ProfileProps> = ({ name, username, email, isAdmin: initi
 
                 <button onClick={toggleAdminStatus} className="btn btn-secondary w-100 mt-3">
                     {'Click to Toggle Admin Status'}
+                </button>
+                <button onClick={handleViewGroups} className="btn btn-secondary w-100 mt-3">
+                    {'Profile Management'}
                 </button>
             </div>
 
