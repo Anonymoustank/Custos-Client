@@ -40,9 +40,12 @@ Verifying User Creation:
 - Open the Network Tab in your browser's Developer Tools (Inspect Element).
 - Look for relevant gRPC requests and their responses.
 
-## Proxy Server Endpoints
+# Proxy Server Endpoints
 - `/createUserProfile`
 - `/createGroup`
 - `/deleteGroup`
 - `/getAllGroups`
+
+# Future Additions
+This project could be extended by adding in functionality to filter groups by their scopes. Moreover, other features like updating users could be added.
 
