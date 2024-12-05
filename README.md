@@ -43,4 +43,6 @@ Verifying User Creation:
 ## Proxy Server Endpoints
 - `/createUserProfile`
 - `/createGroup`
+- `/deleteGroup`
+- `/getAllGroups`
 
